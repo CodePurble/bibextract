@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+import argparse
+import bibtexparser
+import subprocess
+import shlex
+from bibtexparser.bparser import BibTexParser, BibDatabase
+from bibtexparser.bwriter import BibTexWriter
+
+def main():
+    parser = argparse.ArgumentParser(
+            description="""Extract bibliography entries from LaTeX sources
+            using a reference BibTeX file""",
+            epilog="""For reporting bugs, giving suggestions and contributing
+            to this project, visit https://github.com/CodePurble/bibextract"""
+            )
+    parser.add_argument("-b",
+                        "--bib",
+                        required=True,
+                        help="BibTeX file to look for entries in"
+                        )
+    parser.add_argument("-o",
+                        "--output",
+                        default="ext.bib",
+                        help="""File to which the extracted entries are output
+                        to. Default is './ext.bib'""",
+                        )
+    parser.add_argument("-e",
+                        "--entries",
+                        help="""Text file containing entries to extract from
+                        the BibTeX file, each line in the file must have ONE
+                        BibTeX label"""
+                        )
+    parser.add_argument("-q",
+                        "--quiet",
+                        default=False,
+                        help="Suppress output to stdout",
+                        action="store_true"
+                        )
+    parser.add_argument("files",
+                        help="""LaTeX files to scan for citations whose BibTeX
+                        entries need to be extract""",
+                        action="extend",
+                        nargs="+"
+                        )
+    parser.add_argument("-i",
+                        "--indent",
+                        help="""Indentation to be used in the generated BibTeX
+                        file. Default is four spaces""",
+                        default="    ",
+                        )
+
+    args = parser.parse_args()
+
+    # Scan LaTeX files for citations and generate set containing BibTeX entry
+    # labels
+    e_set = set()
+    for file in args.files:
+        output = subprocess.run(['./ext.sh', shlex.quote(file)],
+                                capture_output=True
+                                )
+        if(output.returncode == 0):
+            e_set = e_set.union(set(output.stdout.decode().rstrip().split('\n')))
+
+    # Merge custom BibTeX entry labels into main set if any
+    if(args.entries is not None):
+        with open(args.entries, 'r') as en:
+            while(entry := en.readline()):
+                e_set = e_set.union(entry)
+
+    parser = BibTexParser()
+    parser.ignore_nonstandard_types = False
+    with open(args.bib) as bibtex_file:
+        bib_database = bibtexparser.load(bibtex_file, parser)
+
+    e_dict = bib_database.entries_dict
+    out_db = BibDatabase()
+
+    entrycount = 0
+    found = 0
+    for entry in e_set:
+        entrycount += 1
+        if entry in e_dict.keys():
+            if not args.quiet:
+                print(f"Found: {entry}")
+            found += 1
+            out_db.entries.append(e_dict[entry])
+        else:
+            if not args.quiet:
+                print(f"Not found: {entry}")
+
+
+    writer = BibTexWriter()
+    writer.indent = args.indent
+    writer.add_trailing_comma = True
+    with open(args.output, 'w') as outfile:
+        bibtexparser.dump(out_db, outfile, writer)
+
+    if not args.quiet:
+        print(f"\nFound {found}/{entrycount} entries")
+
+if __name__ == "__main__":
+    main()

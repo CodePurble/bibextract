@@ -1,0 +1,3 @@
+- [ ] Remove dependency on `ext.sh`
+- [ ] Support multiple reference BibTeX files
+- [ ] Support a directory of reference BibTeX files
