@@ -56,7 +56,8 @@ def main():
     # labels
     e_set = set()
     for file in args.files:
-        output = subprocess.run(['./ext.sh', shlex.quote(file)],
+        output = subprocess.run([os.path.dirname(os.path.realpath(__file__)) + '/ext.sh',
+                                 shlex.quote(file)],
                                 capture_output=True
                                 )
         if(output.returncode == 0):
@@ -99,5 +100,6 @@ def main():
     if not args.quiet:
         print(f"\nFound {found}/{entrycount} entries")
 
+import os
 if __name__ == "__main__":
     main()
