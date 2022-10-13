@@ -16,15 +16,19 @@ Once you have installed the dependencies, clone this repository
 git clone https://github.com/CodePurble/bibextract.git
 ```
 
-Run `install.sh`. The files will be installed to `/usr/local/bin`. This can be
-changed by modifying the `PREFIX` variable in `install.sh`.
+Run `install.sh`. By default, the files will be installed to `/usr/local`.
 ```sh
-./install.sh
+sudo ./install.sh
 ```
 
-> **NOTE**: To uninstall, use the provided `uninstall.sh` script. If you edited
-> `PREFIX` while installing, make sure to update `uninstall.sh` also with the
-> same value before running.
+A custom install prefix can be also be given
+```sh
+./install.sh my/custom/prefix
+```
+
+> **NOTE**: To uninstall, use the provided `uninstall.sh` script. If you used a
+> custom prefix while installing, make sure to use the **SAME PREFIX** when
+> running `uninstall.sh` (e.g. `./uninstall.sh my/custom/prefix`)
 
 ### Updating an existing install
 First, navigate to where you initially cloned this repo and pull down the latest changes:
@@ -33,10 +37,8 @@ cd path/to/repo
 git pull origin master
 ```
 
-Then, rerun `install.sh`
-```sh
-./install.sh
-```
+Then, rerun `install.sh`. If you used a custom prefix the first time you
+installed, use the same here as well for correctly updating the scripts.
 
 ## Usage
 Check the help-text:
