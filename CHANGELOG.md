@@ -1,5 +1,11 @@
-# v0.1
-* Initial release
+# v1.0
+## Breaking changes
+* LaTeX source files are now provided using the `-f/--files` option rather than
+  as positional arguments
+
+## Feature additions
+* Add dry-run option `-d/--dryrun`
+* Add version option `-v/--version`
 
 # v0.12
 ## Fixes
@@ -8,4 +14,5 @@
 ## Feature additions
 * Add option to specify a custom install prefix
 
-
+# v0.1
+* Initial release

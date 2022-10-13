@@ -7,8 +7,7 @@ citations from LaTeX sources, to create project-specific BibTeX files.
 
 # SYNOPSIS
 
-
-bibx \[-h] -b BIB \[-o OUTPUT] \[-e ENTRIES] \[-q] \[-i INDENT] files \[files ...]
+bibx \[-h] \[-v] \[-o OUTPUT] \[-e ENTRIES] \[-q] \[-f FILES [FILES ...]] \[-i INDENT] \[-d] \[-b BIB]
 
 # DESCRIPTION
 
@@ -31,29 +30,44 @@ label3
 
 # OPTIONS
 
--h, --help
+-h, \--help
 
     Show help and exit
 
--b BIB, --bib BIB
+-v, \--version
 
-    Specify global BibTeX file to look for entries in
+    Show version information and exit
 
--o OUTPUT, --output OUTPUT
+-b BIB, \--bib BIB
+
+    Specify global BibTeX file to look for entries in (required if not using -h
+    or -v)
+
+-f FILES [FILES ...], \--files FILES [FILES ...]
+
+    LaTeX files to scan for citations whose BibTeX entries need to be extracted
+    (required if not using -h or -v)
+
+-o OUTPUT, \--output OUTPUT
 
     Specify file to write the BibTeX output to. Defaults to './ext.bib'.
 
--e ENTRIES, --entries ENTRIES
+-e ENTRIES, \--entries ENTRIES
 
     Specify file containing extra entries names to be searched and included in
     the final output.
 
--i INDENT, --indent INDENT
+-i INDENT, \--indent INDENT
 
     Specify the character(s) to be used to indent the BibTeX entries in the
     final output. Defaults to four spaces. Example: -i "  " (use two spaces).
 
--q, --quiet
+-d, \--dryrun
+
+    Perform a dry-run, i.e. do not output to a file, just print info messages.
+    Ignores the -o option, affected by -q.
+
+-q, \--quiet
 
     Suppress output to stdout
 
@@ -64,7 +78,7 @@ BibTeX file is `g.bib` and we want the output file to be `refs.bib`.
 
 The command to achieve this would be:
 ```
-bibx -b g.bib -o refs.bib a.tex b.tex
+bibx -b g.bib -o refs.bib -f a.tex b.tex
 ```
 
 # BUGS

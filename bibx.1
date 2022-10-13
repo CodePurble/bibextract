@@ -23,8 +23,8 @@ using citations from LaTeX sources, to create project-specific BibTeX
 files.
 .SH SYNOPSIS
 .PP
-bibx [-h] -b BIB [-o OUTPUT] [-e ENTRIES] [-q] [-i INDENT] files [files
-\&...]
+bibx [-h] [-v] [-o OUTPUT] [-e ENTRIES] [-q] [-f FILES [FILES \&...]]
+[-i INDENT] [-d] [-b BIB]
 .SH DESCRIPTION
 .PP
 This program extracts citations made in LaTeX source files and generates
@@ -49,7 +49,7 @@ label3
 .fi
 .SH OPTIONS
 .PP
--h, \[en]help
+-h, --help
 .IP
 .nf
 \f[C]
@@ -57,15 +57,33 @@ Show help and exit
 \f[R]
 .fi
 .PP
--b BIB, \[en]bib BIB
+-v, --version
 .IP
 .nf
 \f[C]
-Specify global BibTeX file to look for entries in
+Show version information and exit
 \f[R]
 .fi
 .PP
--o OUTPUT, \[en]output OUTPUT
+-b BIB, --bib BIB
+.IP
+.nf
+\f[C]
+Specify global BibTeX file to look for entries in (required if not using -h
+or -v)
+\f[R]
+.fi
+.PP
+-f FILES [FILES \&...], --files FILES [FILES \&...]
+.IP
+.nf
+\f[C]
+LaTeX files to scan for citations whose BibTeX entries need to be extracted
+(required if not using -h or -v)
+\f[R]
+.fi
+.PP
+-o OUTPUT, --output OUTPUT
 .IP
 .nf
 \f[C]
@@ -73,7 +91,7 @@ Specify file to write the BibTeX output to. Defaults to \[aq]./ext.bib\[aq].
 \f[R]
 .fi
 .PP
--e ENTRIES, \[en]entries ENTRIES
+-e ENTRIES, --entries ENTRIES
 .IP
 .nf
 \f[C]
@@ -82,7 +100,7 @@ the final output.
 \f[R]
 .fi
 .PP
--i INDENT, \[en]indent INDENT
+-i INDENT, --indent INDENT
 .IP
 .nf
 \f[C]
@@ -91,7 +109,16 @@ final output. Defaults to four spaces. Example: -i \[dq]  \[dq] (use two spaces)
 \f[R]
 .fi
 .PP
--q, \[en]quiet
+-d, --dryrun
+.IP
+.nf
+\f[C]
+Perform a dry-run, i.e. do not output to a file, just print info messages.
+Ignores the -o option, affected by -q.
+\f[R]
+.fi
+.PP
+-q, --quiet
 .IP
 .nf
 \f[C]
@@ -108,7 +135,7 @@ The command to achieve this would be:
 .IP
 .nf
 \f[C]
-bibx -b g.bib -o refs.bib a.tex b.tex
+bibx -b g.bib -o refs.bib -f a.tex b.tex
 \f[R]
 .fi
 .SH BUGS

@@ -56,10 +56,10 @@ Assume that there are two LaTeX files: `a.tex` and `b.tex`, the reference
 BibTeX file is `g.bib` and we want the output file to be `refs.bib`. The
 command to achieve this would be:
 ```sh
-bibx -b g.bib -o refs.bib a.tex b.tex
+bibx -b g.bib -o refs.bib -f a.tex b.tex
 
 # A variation
-bibx -b g.bib -o refs.bib *.tex
+bibx -b g.bib -o refs.bib -f *.tex
 ```
 
 ## Bugs
@@ -84,7 +84,7 @@ pandoc --standalone --to man bibx.1.md -o bibx.1
 ### Tests
 If contributing to the code, please run the following test after your edits:
 ```
-./bibx -b test/global.bib -o test/ext.bib test/*.tex
+./bibx -b test/global.bib -o test/ext.bib -f test/*.tex
 diff test/ext.bib test/ext-golden.bib
 ```
 The `diff` command must return **NOTHING**. This means that the output is as
