@@ -1,3 +1,4 @@
 - [ ] Remove dependency on `ext.sh`
 - [ ] Support multiple reference BibTeX files
 - [ ] Support a directory of reference BibTeX files
+- [ ] Option to perform a dry-run (no file output, only print info to stdout)
