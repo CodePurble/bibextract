@@ -4,6 +4,7 @@ import argparse
 import bibtexparser
 import subprocess
 import shlex
+import os
 from bibtexparser.bparser import BibTexParser, BibDatabase
 from bibtexparser.bwriter import BibTexWriter
 
@@ -100,6 +101,5 @@ def main():
     if not args.quiet:
         print(f"\nFound {found}/{entrycount} entries")
 
-import os
 if __name__ == "__main__":
     main()
