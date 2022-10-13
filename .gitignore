@@ -1,3 +1,6 @@
+# test related
+test/ext.bib
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
