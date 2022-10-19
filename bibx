@@ -10,61 +10,70 @@ from bibtexparser.bwriter import BibTexWriter
 
 VERSION = "v1.0"
 
+
 def get_parser():
     parser = argparse.ArgumentParser(
-            description="""Extract bibliography entries from LaTeX sources
+        description="""Extract bibliography entries from LaTeX sources
             using a reference BibTeX file""",
-            epilog="""For reporting bugs, giving suggestions and contributing
-            to this project, visit https://github.com/CodePurble/bibextract"""
-            )
-    parser.add_argument("-v",
-                        "--version",
-                        help="Show version information and exit",
-                        action="store_true"
-                        )
-    parser.add_argument("-o",
-                        "--output",
-                        default="ext.bib",
-                        help="""File to which the extracted entries are output
+        epilog="""For reporting bugs, giving suggestions and contributing
+            to this project, visit https://github.com/CodePurble/bibextract""",
+    )
+    parser.add_argument(
+        "-v", "--version", help="Show version information and exit", action="store_true"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="ext.bib",
+        help="""File to which the extracted entries are output
                         to. Default is './ext.bib'""",
-                        )
-    parser.add_argument("-e",
-                        "--entries",
-                        help="""Text file containing entries to extract from
+    )
+    parser.add_argument(
+        "-e",
+        "--entries",
+        help="""Text file containing entries to extract from
                         the BibTeX file, each line in the file must have ONE
-                        BibTeX label"""
-                        )
-    parser.add_argument("-q",
-                        "--quiet",
-                        default=False,
-                        help="Suppress output to stdout",
-                        action="store_true"
-                        )
-    parser.add_argument("-f",
-                        "--files",
-                        help="""LaTeX files to scan for citations whose BibTeX
+                        BibTeX label""",
+    )
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        default=False,
+        help="Suppress output to stdout",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-f",
+        "--files",
+        help="""LaTeX files to scan for citations whose BibTeX
                         entries need to be extracted""",
-                        action="extend",
-                        nargs="+"
-                        )
-    parser.add_argument("-i",
-                        "--indent",
-                        help="""Indentation to be used in the generated BibTeX
+        action="extend",
+        nargs="+",
+    )
+    parser.add_argument(
+        "-i",
+        "--indent",
+        help="""Indentation to be used in the generated BibTeX
                         file. Default is four spaces""",
-                        default="    ",
-                        )
-    parser.add_argument("-d",
-                        "--dryrun",
-                        help="""Perform a dry-run, i.e. do not output a file,
+        default="    ",
+    )
+    parser.add_argument(
+        "-d",
+        "--dryrun",
+        help="""Perform a dry-run, i.e. do not output a file,
                         just print info messages. Ignores the -o option,
                         affected by -q""",
-                        action="store_true"
-                        )
-    parser.add_argument("-b",
-                        "--bib",
-                        help="BibTeX file to look for entries in",
-                        )
-    return(parser)
+        action="store_true",
+    )
+    parser.add_argument(
+        "-b",
+        "--bib",
+        help="BibTeX file(s) to look for entries in",
+        action="extend",
+        nargs="+",
+    )
+    return parser
+
 
 def main():
     parser = get_parser()
@@ -75,23 +84,30 @@ def main():
     else:
         if (args.bib is None) or (args.files is None):
             parser.print_usage()
-            parser.exit(2, "Error: the following arguments are required: -b/--bib, -f/--files\n")
+            parser.exit(
+                2, "Error: the following arguments are required: -b/--bib, -f/--files\n"
+            )
         else:
             # Scan LaTeX files for citations and generate set containing BibTeX entry
             # labels
             e_set = set()
             for file in args.files:
-                output = subprocess.run([os.path.dirname(os.path.realpath(__file__)) + '/ext.sh',
-                                         shlex.quote(file)],
-                                        capture_output=True
-                                        )
-                if(output.returncode == 0):
-                    e_set = e_set.union(set(output.stdout.decode().rstrip().split('\n')))
+                output = subprocess.run(
+                    [
+                        os.path.dirname(os.path.realpath(__file__)) + "/ext.sh",
+                        shlex.quote(file),
+                    ],
+                    capture_output=True,
+                )
+                if output.returncode == 0:
+                    e_set = e_set.union(
+                        set(output.stdout.decode().rstrip().split("\n"))
+                    )
 
             # Merge custom BibTeX entry labels into main set if any
-            if(args.entries is not None):
-                with open(args.entries, 'r') as en:
-                    while(entry := en.readline()):
+            if args.entries is not None:
+                with open(args.entries, "r") as en:
+                    while entry := en.readline():
                         e_set = e_set.union(entry)
 
             parser = BibTexParser()
@@ -115,16 +131,16 @@ def main():
                     if not args.quiet:
                         print(f"Not found: {entry}")
 
-
             writer = BibTexWriter()
             writer.indent = args.indent
             writer.add_trailing_comma = True
             if not args.dryrun:
-                with open(args.output, 'w') as outfile:
+                with open(args.output, "w") as outfile:
                     bibtexparser.dump(out_db, outfile, writer)
 
             if not args.quiet:
                 print(f"\nFound {found}/{entrycount} entries")
+
 
 if __name__ == "__main__":
     main()
