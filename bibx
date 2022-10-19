@@ -69,8 +69,8 @@ def get_parser():
         "-b",
         "--bib",
         help="BibTeX file(s) to look for entries in",
-        action="extend",
-        nargs="+",
+        # action="extend",
+        # nargs="+",
     )
     return parser
 
@@ -118,10 +118,8 @@ def main():
             e_dict = bib_database.entries_dict
             out_db = BibDatabase()
 
-            entrycount = 0
             found = 0
             for entry in e_set:
-                entrycount += 1
                 if entry in e_dict.keys():
                     if not args.quiet:
                         print(f"Found: {entry}")
@@ -139,7 +137,7 @@ def main():
                     bibtexparser.dump(out_db, outfile, writer)
 
             if not args.quiet:
-                print(f"\nFound {found}/{entrycount} entries")
+                print(f"\nFound {found}/{len(e_set)} entries")
 
 
 if __name__ == "__main__":
