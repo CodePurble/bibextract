@@ -69,8 +69,8 @@ def get_parser():
         "-b",
         "--bib",
         help="BibTeX file(s) to look for entries in",
-        # action="extend",
-        # nargs="+",
+        action="extend",
+        nargs="+",
     )
     return parser
 
@@ -110,14 +110,16 @@ def main():
                     while entry := en.readline():
                         e_set = e_set.union(entry)
 
-            parser = BibTexParser()
-            parser.ignore_nonstandard_types = False
-            with open(args.bib) as bibtex_file:
-                bib_database = bibtexparser.load(bibtex_file, parser)
+            e_dict = {}
+            for file in args.bib:
+                with open(file) as bibtex_file:
+                    parser = BibTexParser()
+                    parser.ignore_nonstandard_types = False
+                    bib_database = bibtexparser.load(bibtex_file, parser)
+                    curr_dict = bib_database.entries_dict
+                    e_dict.update(curr_dict)
 
-            e_dict = bib_database.entries_dict
             out_db = BibDatabase()
-
             found = 0
             for entry in e_set:
                 if entry in e_dict.keys():

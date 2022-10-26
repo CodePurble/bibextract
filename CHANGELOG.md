@@ -1,3 +1,9 @@
+# v1.1
+## Breaking changes
+
+## Feature additions
+* Add support for multiple BibTeX inputs
+
 # v1.0
 ## Breaking changes
 * LaTeX source files are now provided using the `-f/--files` option rather than
