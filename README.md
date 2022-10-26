@@ -109,6 +109,10 @@ diff test/ext.bib test/ext-golden.bib
 The `diff` command must return **NOTHING**. This means that the output is as
 expected for the given inputs.
 
+## Related tools
+* [bibtool](https://github.com/ge-ne/bibtool)
+* [biber](https://github.com/plk/biber)
+
 ## License
 
 Free use of this software is granted under the terms of the [GPLv3
